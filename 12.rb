@@ -10,12 +10,9 @@ end
    @trains << train
  end
 
- def trains
-   @trains
- end
-
  def trains_type(type)
    trains.select {|train| train.type == type} #something wrong fix later
+ end
 
  def send_train(train)
    trains.delete(train)
@@ -45,7 +42,7 @@ end
 end
 
 class Train
- attr_accessor :type, :speed, :wagon_quantity, :route 
+ attr_accessor :type, :speed, :wagon_quantity, :route
 end
  def initialize(number,type)
    @number = number
@@ -74,15 +71,19 @@ end
 
   def take_route(stations)
     @route = stations
-    @current_station = stations.station_list[0]
+    @current_station = stations[0]
   end
 
-  def move_forward
-    @route.station_list[1] # опять какие то сомнения, как это будет работать уже в пути, когда он будет двигаться через substations
+  def move_forward(route)
+    stations[0].send_train(train)
+    stations[1].accept_train(train)
+    @current_station = stations[1] # опять какие то сомнения, как это будет работать уже в пути, когда он будет двигаться через substations
   end
 
   def move_back
-    @route.station_list[-1] # и тут мне все не нравиться, чего то не хватает, так поезд попадет на конечную станцию ведь
+    stations[0].send_train(train)
+    stations[-1].accept_train(train) # здесь явно ошибка
+    @current_station = stations[-1]
   end
 
   def current_station
@@ -90,10 +91,10 @@ end
   end
 
   def next_station
-    @route.station_list[1] #error need to update
+    @route.stations[1] #error need to update
   end
 
-  def back_station
-    @route.station_list[-1] #error but I can't find how to write it properly
+  def previous_station
+    @route.stations[-1] #error but I can't find how to write it properly
   end
 end
