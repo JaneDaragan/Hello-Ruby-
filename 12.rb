@@ -71,7 +71,7 @@ class Train
     @current_station = stations[0]
   end
 
-  def move_forward(stations)
+  def move_forward
     @route[0].send_train(train)
     @route[1].accept_train(train)
     @current_station = stations[1] # опять какие то сомнения, как это будет работать уже в пути, когда он будет двигаться через substations
