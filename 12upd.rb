@@ -32,7 +32,7 @@ class Route
  end
 
  def delete_substation(substation)
-   @stations.delete(substation) if substation.index !=0 || !=-1
+   @stations.delete(substation) if substation.index !=0 ||substation.index !=-1
  end
 
  def route_stations
