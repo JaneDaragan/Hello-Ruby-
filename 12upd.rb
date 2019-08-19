@@ -74,14 +74,16 @@ class Train
 
   def move_forward(route)
     @current_station.send_train(train)
-    route.stations.accept_train(train)
-    @current_station = route.stations.first
+    @route.stations.first(2).at(1).accept_train(train)
+    @current_station =  @route.stations.first(2).at(1)
   end
 
-  def move_back(route)
+  def move_back(route) # нужно написать позже по человечески 
     @current_station.send_train(train)
-    route.stations.accept_train(train)
-    @current_station = route.stations.first
+    index =  @route.route_stations.find_index(@current_station.station_name)
+    @back_station = @route.route_stations(index -1) 
+    @back_station.accept_train
+    @current_station = back_station    
   end
 
   def current_station
@@ -93,6 +95,7 @@ class Train
   end
 
   def previous_station
-  @previous_station = @route.route_stations - @current_station
+    index = @route.route_stations.find_index(@current_station.station_name)
+    @previous_station = @route.route_stations(index -1)
   end
 end
