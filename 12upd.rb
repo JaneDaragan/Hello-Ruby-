@@ -1,12 +1,11 @@
 class Station
- attr_reader :station_name
- attr_writer :trains
- def initialize(station_name)
-   @station_name = station_name
+ attr_reader :name, :trains
+ def initialize(name,trains)
+   @name = name
+   @trains = []
  end
 
  def accept_train(train)
-   @trains = []
    @trains << train
  end
 
@@ -32,7 +31,7 @@ class Route
  end
 
  def delete_substation(substation)
-   @stations.delete(substation) if substation.index !=0 ||substation.index !=-1
+   @stations.delete(substation) if substation != @stations[0]||substation != @stations[-1]
  end
 
  def route_stations
@@ -73,14 +72,14 @@ class Train
   end
 
   def move_forward(route)
-    @current_station.send_train(train)
-    @route.stations.first(2).at(1).accept_train(train)
+    @current_station.send_train(self)
+    @route.stations.first(2).at(1).accept_train(self)
     @current_station =  @route.stations.first(2).at(1)
   end
 
   def move_back(route) # нужно написать позже по человечески 
-    @current_station.send_train(train)
-    index =  @route.route_stations.find_index(@current_station.station_name)
+    @current_station.send_train(self)
+    index =  @route.route_stations.find_index(@current_station)
     @back_station = @route.route_stations(index -1) 
     @back_station.accept_train
     @current_station = back_station    
@@ -95,7 +94,7 @@ class Train
   end
 
   def previous_station
-    index = @route.route_stations.find_index(@current_station.station_name)
+    index = @route.route_stations.find_index(@current_station)
     @previous_station = @route.route_stations(index -1)
   end
 end
