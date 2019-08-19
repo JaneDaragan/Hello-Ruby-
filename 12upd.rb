@@ -72,12 +72,14 @@ class Train
   end
 
   def move_forward(route)
+    return "Error" if @current_station = @stations(-1) 
     @current_station.send_train(self)
     @route.stations.first(2).at(1).accept_train(self)
     @current_station =  @route.stations.first(2).at(1)
   end
 
-  def move_back(route) # нужно написать позже по человечески 
+  def move_back(route)# нужно написать позже по человечески 
+    return "Error" if @current_station = @stations(0) 
     @current_station.send_train(self)
     index =  @route.route_stations.find_index(@current_station)
     @back_station = @route.route_stations(index -1) 
