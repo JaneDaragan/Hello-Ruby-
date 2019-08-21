@@ -69,6 +69,7 @@ class Train
   def take_route(route)
     @route = route
     @current_station = @route.route_stations.first
+    @current_station.accept_train(self)
   end
 
   def move_forward(route)
