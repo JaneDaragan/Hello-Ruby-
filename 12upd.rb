@@ -78,13 +78,13 @@ class Train
     @current_station =  @route.stations.first(2).at(1)
   end
 
-  def move_back(route)# нужно написать позже по человечески 
+  def move_back(route)# нужно написать позже по человечески без лишних переменных  
     return "Error" if @current_station = @route.route_stations[0]
     @current_station.send_train(self)
     index =  @route.route_stations.find_index(@current_station)
     @back_station = @route.route_stations[index-1]
     @back_station.accept_train(self)
-    @current_station = back_station    
+    @current_station = @back_station    
   end
 
   def current_station(route)
