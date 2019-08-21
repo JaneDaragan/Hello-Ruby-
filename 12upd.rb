@@ -68,26 +68,26 @@ class Train
 
   def take_route(route)
     @route = route
-    @current_station = route.stations.first
+    @current_station = @route.route_stations.first
   end
 
   def move_forward(route)
-    return "Error" if @current_station = @stations(-1) 
+    return "Error" if @current_station = @route.route_stations[-1]
     @current_station.send_train(self)
     @route.stations.first(2).at(1).accept_train(self)
     @current_station =  @route.stations.first(2).at(1)
   end
 
   def move_back(route)# нужно написать позже по человечески 
-    return "Error" if @current_station = @stations(0) 
+    return "Error" if @current_station = @route.route_stations[0]
     @current_station.send_train(self)
     index =  @route.route_stations.find_index(@current_station)
-    @back_station = @route.route_stations(index -1) 
-    @back_station.accept_train
+    @back_station = @route.route_stations[index-1]
+    @back_station.accept_train(self)
     @current_station = back_station    
   end
 
-  def current_station
+  def current_station(route)
     @current_station
   end
 
@@ -95,8 +95,8 @@ class Train
     @route.route_stations.first(2).at(1)    #[current_index +1]
   end
 
-  def previous_station
+  def previous_station(route)
     index = @route.route_stations.find_index(@current_station)
-    @previous_station = @route.route_stations(index -1)
+    @previous_station = @route.route_stations[index-1]
   end
 end
