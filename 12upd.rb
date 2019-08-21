@@ -27,7 +27,7 @@ class Route
  end
 
  def add_substation(substation)
-   @stations.insert(-1, substation)
+   @stations.insert(-2, substation)
  end
 
  def delete_substation(substation)
