@@ -43,14 +43,14 @@ end
 class PassengerTrain
  attr_reader :type,:number 
  attr_accessor :current_station
- def initialize(number,type)
+ def initialize
    @number = number
-   @type = type
+   @type = passenger
    @wagons = []
    @speed = 0
  end
 
- def add_wagon(pas_wagon)
+ def add_wagon(pass_wagon)
   return "Error" if @speed != 0
    @wagons +=1
  end
