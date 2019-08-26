@@ -50,14 +50,15 @@ class PassengerTrain
    @speed = 0
  end
 
- def add_wagon(pass_wagon)
+ def add_wagon(wagon)
   return "Error" if @speed != 0
-   @wagons << pass_wagon
+  return "Error" if wagon.type != passenger
+   @wagons << wagon
  end
 
- def delete_wagon(pass_wagon)
+ def delete_wagon(wagon)
   return "Error" if @speed != 0
-   @wagons.delete(pass_wagon)
+   @wagons.delete(wagon)
  end
 
  def take_route(route)
@@ -102,9 +103,9 @@ class PassengerTrain
 end 
 
 class PassengerWagon
- def initialize(seats_quantity, passenger_type)
-   @seats_quantity = seats_quantity
-   @passenger_type = passenger_type # need to think need this or not
+ def initialize(seats_quantity,type)
+   @seats_quantity = 52
+   @type = passenger
  end
 end
 
@@ -118,14 +119,15 @@ class CargoTrain
    @speed = 0
  end
 
- def add_wagon(cargo_wagon)
+ def add_wagon(wagon)
   return "Error" if @speed != 0
-   @wagons +=1
+  return "Error" if wagon.type != cargo
+  @wagons << wagon
  end
 
- def delete_wagon(cargo_wagon)
+ def delete_wagon(wagon)
   return "Error" if @speed != 0
-   @wagons -=1
+   @wagons.delete(wagon)
  end
 
  def take_route(route)
@@ -136,20 +138,14 @@ class CargoTrain
 
  def move_forward
   return "No way forward.It is the last station" if @current_station == @route.route_stations[-1]
-  return uless @current_station && @route.route_stations
-   @current_station.send_train(self)
-   next_station.accept_train(self)
-   @current_station = next_station
+  move_train(next_station)
  end
 
  def move_back
   return "No way back.It is the first station" if @current_station == @route.route_stations[0]
-  return unless @current_stations && @route.route_stations
-   @current_station.send_train(self)
-   previous_station.accept_train(self)
-   @current_station = previous_station
- end
-
+  move_train(previous_station)
+ end  
+   
  def current_station
    @current_station
  end
@@ -164,6 +160,13 @@ class CargoTrain
  
  private 
  
+ def move_train(station)
+  return unless @current_stations && @route.route_stations
+  @current_station.send_train(self)
+  station.accept_train(self)
+  @current_station = station
+ end 
+ 
  def current_station_index # this nethod is private since it is part of internal logic inside other methods and there is no need to use it separately
    @route.route_station.index(@current_station)
  end
@@ -171,8 +174,8 @@ class CargoTrain
 end
 
 class CargoWagon
-  def initialize(wagon_volume,cargo_type)
-   @wagon_volume = wagon_volume
-   @cargo_type = cargo_type
+  def initialize(volume,type)
+   @volume = 44000
+   @type = cargo
   end
 end
