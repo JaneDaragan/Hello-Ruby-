@@ -52,12 +52,12 @@ class PassengerTrain
 
  def add_wagon(pass_wagon)
   return "Error" if @speed != 0
-   @wagons +=1
+   @wagons << pass_wagon
  end
 
  def delete_wagon(pass_wagon)
   return "Error" if @speed != 0
-   @wagons -=1
+   @wagons.delete(pass_wagon)
  end
 
  def take_route(route)
