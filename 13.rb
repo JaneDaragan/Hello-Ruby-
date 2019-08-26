@@ -41,7 +41,7 @@ class Route
 end
 
 class PassengerTrain
- attr_reader :type,
+ attr_reader :type,:number 
  attr_accessor :current_station
  def initialize(number,type)
    @number = number
@@ -82,16 +82,10 @@ class PassengerTrain
    @current_station = previous_station
  end
 
-private # они приватные, потому что не реализовывают напрямую то логику которая требуется от класса, они вспомогательные по отношению к методам интерфейса класса
-
  def current_station
    @current_station
  end
-
- def current_station_index
-   @route.route_station.index(@current_station)
- end
-
+ 
  def previous_station
    @route.route_stations[current_station_index -1]
  end
@@ -99,6 +93,13 @@ private # они приватные, потому что не реализовы
  def next_station
    @route.route_stations[current_station_index +1]
  end
+  
+ private # они приватные, потому что не реализовывают напрямую то логику которая требуется от класса, они вспомогательные по отношению к методам интерфейса класса
+
+ def current_station_index
+   @route.route_station.index(@current_station)
+ end
+end 
 
 class PassengerWagon
  def initialize(seats_quantity, passenger_type)
@@ -149,14 +150,8 @@ class CargoTrain
    @current_station = previous_station
  end
 
- private # они приватные, потому что не реализовывают напрямую то логику которая требуется от класса, они вспомогательные по отношению к методам интерфейса класса
-
  def current_station
    @current_station
- end
-
- def current_station_index
-   @route.route_station.index(@current_station)
  end
 
  def previous_station
@@ -166,6 +161,13 @@ class CargoTrain
  def next_station
   @route.route_stations[current_station_index +1]
  end
+ 
+ private 
+ 
+ def current_station_index # this nethod is private since it is part of internal logic inside other methods and there is no need to use it separately
+   @route.route_station.index(@current_station)
+ end
+ 
 end
 
 class CargoWagon
