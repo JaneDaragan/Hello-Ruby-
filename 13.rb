@@ -50,12 +50,12 @@ class PassengerTrain
    @speed = 0
  end
 
- def add_wagon(PassengerWagon)
+ def add_wagon(pas_wagon)
   return "Error" if @speed != 0
    @wagons +=1
  end
 
- def delete_wagon(PassengerWagon)
+ def delete_wagon(pass_wagon)
   return "Error" if @speed != 0
    @wagons -=1
  end
@@ -111,19 +111,19 @@ end
 class CargoTrain
  attr_reader :type,
  attr_accessor :current_station
- def initialize(number,type)
+ def initialize
    @number = number
-   @type = type
+   @type = cargo
    @wagons = []
    @speed = 0
  end
 
- def add_wagon(CargoWagon)
+ def add_wagon(cargo_wagon)
   return "Error" if @speed != 0
    @wagons +=1
  end
 
- def delete_wagon(CargoWagon)
+ def delete_wagon(cargo_wagon)
   return "Error" if @speed != 0
    @wagons -=1
  end
