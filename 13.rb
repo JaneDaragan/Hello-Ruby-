@@ -43,16 +43,16 @@ end
 class PassengerTrain
  attr_reader :type,:number 
  attr_accessor :current_station
- def initialize
+ def initialize(number, type)
    @number = number
-   @type = passenger
+   @type = type
    @wagons = []
    @speed = 0
  end
 
  def add_wagon(wagon)
   return "Error" if @speed != 0
-  return "Error" if wagon.type != passenger
+  return "Error" if wagon.type != passenger # this part does not work need to fix 
    @wagons << wagon
  end
 
@@ -104,17 +104,17 @@ end
 
 class PassengerWagon
  def initialize(seats_quantity,type)
-   @seats_quantity = 52
-   @type = passenger
+   @seats_quantity = seats_quantity
+   @type = type
  end
 end
 
 class CargoTrain
  attr_reader :type,
  attr_accessor :current_station
- def initialize
+ def initialize(number, type)
    @number = number
-   @type = cargo
+   @type = type
    @wagons = []
    @speed = 0
  end
@@ -175,7 +175,7 @@ end
 
 class CargoWagon
   def initialize(volume,type)
-   @volume = 44000
-   @type = cargo
+   @volume = volume
+   @type = type
   end
 end
