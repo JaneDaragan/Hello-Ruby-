@@ -52,7 +52,7 @@ class PassengerTrain
 
  def add_wagon(wagon)
   return "Error" if @speed != 0
-  return "Error" if wagon.type != passenger # this part does not work need to fix 
+  return "Error, this is not approrpiate wagon" unless @seats_quantity 
    @wagons << wagon
  end
 
@@ -121,7 +121,7 @@ class CargoTrain
 
  def add_wagon(wagon)
   return "Error" if @speed != 0
-  return "Error" if wagon.type != cargo
+  return "Error it is wrong type of wagon" unless @volume
   @wagons << wagon
  end
 
@@ -170,7 +170,6 @@ class CargoTrain
  def current_station_index # this nethod is private since it is part of internal logic inside other methods and there is no need to use it separately
    @route.route_station.index(@current_station)
  end
- 
 end
 
 class CargoWagon
