@@ -72,12 +72,12 @@ class PassengerTrain
 
  def previous_station
   return 'Error, no previous station it is the first station' if current_station_index == 0
-  @route.stations[current_station_index -=1]
+  @route.stations[current_station_index -1]
  end
 
  def next_station
   return 'Error, there is the final station' if current_station_index == @route.stations.last
-  @route.stations[current_station_index +=1]
+  @route.stations[current_station_index +1]
  end
 
  def move_forward
