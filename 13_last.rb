@@ -92,9 +92,9 @@ class PassengerTrain
  end
 
  private
-
+ # текущий индекс станции перенесен в секцию приватных методов для того чтобы избежать возможных ошибок со стороны пользователя во время движения, для сохранения логики движения, 
  attr_accessor :current_station_index
-
+ # метод движение поезда перенесен в приватные методы для избавления кода от избыточного дублирования и реализации принципа инкапсуляции, оставить в интерфейсе класса, только необходимое.
  def move_train(station)
    return "There is no route" unless @current_station && @route.stations
    current_station.send_train(self)
