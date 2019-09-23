@@ -41,9 +41,8 @@ class Route
 end
 
 class PassengerTrain
- attr_reader :type,:number,:current_station
+ attr_reader :type,:number,:current_station,:route
  attr_writer :current_station
-
  def initialize(number,type)
    @number = number
    @type = type
@@ -62,32 +61,32 @@ class PassengerTrain
    @wagons.delete(wagon)
  end
 
- def take_route(route) #check it
+ def take_route(route)
    @route = route
-   @current_station = @route.stations.first
-   @current_station_index = @route.stations.index(current_station)
+   @current_station = route.stations.first
+   @current_station_index = 0
    current_station.accept_train(self)
    p 'Train took the route'
  end
 
  def previous_station
-  return 'Error, no previous station it is the first station' if current_station_index == 0
-  @route.stations[current_station_index -1]
+  return 'Error, no previous station it is the first station' if current_station == route.stations.first
+  route.stations[current_station_index-1]
  end
 
  def next_station
-  return 'Error, there is the final station' if current_station_index == @route.stations.index(last)
-  @route.stations[current_station_index +1]
+  return 'Error, there is the final station' if current_station == route.stations.last
+  route.stations[current_station_index+1]
  end
 
  def move_forward
-  return "No way forward.It is the last station" if current_station_index == @route.stations.last
+  return "No way forward.It is the last station" if current_station == route.stations.last
   move_train(next_station)
   p "we moved to #{current_station.name}"
  end
 
- def move_back(previous_station)
-  return "No way back.It is the first station" if current_station_index == @route.stations.first
+ def move_back
+  return "No way back.It is the first station" if current_station == route.stations.first
   move_train(previous_station)
   p "we moved to #{current_station.name}"
  end
@@ -100,8 +99,8 @@ class PassengerTrain
    return "There is no route" unless @current_station && @route.stations
    current_station.send_train(self)
    station.accept_train(self)
-   current_station = @station
-   @current_station_index = @route.stations.index(station)
+   self.current_station = station
+   self.current_station_index = route.stations.index(station)
  end
 end
 
@@ -112,7 +111,7 @@ class PassengerWagon
 end
 
 class CargoTrain
- attr_reader :type, :current_station
+ attr_reader :type, :current_station,:route
  attr_writer :current_station
  def initialize(number, type)
    @number = number
@@ -134,41 +133,41 @@ class CargoTrain
 
  def take_route(route)
   @route = route
-  @current_station = @route.stations.first
-  @current_station_index = @route.stations.index(current_station)
+  @current_station = route.stations.first
+  @current_station_index = 0
   current_station.accept_train(self)
  end
 
  def move_forward
-  return "No way forward.It is the last station" if current_station_index == @route.stations.last
+  return "No way forward.It is the last station" if current_station == route.stations.last
   move_train(next_station)
-  p "we moved to #{@current_station.name}"
+  p "we moved to #{current_station.name}"
  end
 
  def move_back
-  return "No way back.It is the first station" if current_station_index == @route.stations.first
+  return "No way back.It is the first station" if current_station == route.stations.first
   move_train(previous_station)
-  p "we moved to #{@current_station.name}"
+  p "we moved to #{current_station.name}"
  end
 
-  def previous_station
-   @route.stations[current_station_index -=1]
+ def previous_station
+   route.stations[current_station_index-1]
  end
 
  def next_station
-   @route.stations[current_station_index +=1]
+   route.stations[current_station_index+1]
  end
 
  private
-
- attr_accessor :current_station_index # this nethod is private since it is part of internal logic inside other methods and there is no need to use it sep
+ # this nethod is private since it is part of internal logic inside other methods and there is no need to use it sep
+ attr_accessor :current_station_index
 
  def move_train(station)
   return "No route!" unless @current_station && @route.stations
   current_station.send_train(self)
   station.accept_train(self)
-  current_station = station
-  current_station_index = @route.stations.index(station)
+  self.current_station = station
+  self.current_station_index = route.stations.index(station)
  end
 end
 
@@ -177,3 +176,58 @@ class CargoWagon
    @volume = volume
   end
 end
+
+=begin описание как тестировался код в IRB
+st1 = Station.new('Almaty')
+st2 = Station.new('Karaganda')
+st3 = Station.new('Astana')
+route = Route.new(st1, st3)
+train_pass = PassengerTrain.new(111, 'passenger')
+train_cargo = CargoTrain.new(222, 'cargo')
+wagon_cargo = CargoWagon.new(130, 'cargo')
+wagon_passenger = PassengerWagon.new(52, 'passenger')
+
+1) создаем 8 объектов экземпляров классов,
+2) тестируем модель движения вперед и назад по маршруту
+3) тестируем добавление грузового вагона к грузовому поезду
+4) тестируем добавление грузового вагона к пассажирскому поезду
+5) тестируем добавление пассажирского вагона к пассажирскому поезду
+6) тестируем добавление пассажирского вагона к грузовому поезду
+
+st1 = Station.new('Almaty')
+st2 = Station.new('Karaganda')
+st3 = Station.new('Astana')
+
+route = Route.new(st1, st3)
+route.add_substation(st2)
+route.delete_substation(st2)
+
+train_pass = PassengerTrain.new(111, 'passenger')
+train_cargo = CargoTrain.new(222, 'cargo')
+
+st1.accept_train(train_pass)
+st1.send_train(train_pass)
+
+wagon_cargo = CargoWagon.new(130,'cargo')
+wagon_passenger = PassengerWagon.new(52, 'passenger')
+
+train_pass.add_wagon(wagon_cargo)
+train_pass.add_wagon(wagon_passenger)
+
+train_pass.take_route(route)
+train_pass.current_station
+train_pass.move_forward
+train_pass.move_back
+train_pass.next_station
+train_pass.previous_station
+
+train_cargo.add_wagon(wagon_cargo)
+train_cargo.add_wagon(wagon_passenger)
+
+train_cargo.take_route(route)
+train_cargo.current_station
+train_cargo.move_forward
+train_cargo.move_back
+train_cargo.next_station
+train_cargo.previous_station
+=end
